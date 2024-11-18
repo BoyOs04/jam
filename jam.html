@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Doto:wght@100..900&display=swap" rel="stylesheet">
+    <title>Digital Analog Clock</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: wheat;
+            font-family: Doto, sans-serif;
+            flex-direction: column;
+            font-size: 5vh;
+        }
+
+        .judul {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .zone-time {
+            font-size: 16px;
+            margin-top: 5px;
+            
+            color: #333;
+        }
+
+        .clock {
+            width: 300px;
+            height: 300px;
+            box-shadow: inset 0px 0px 8px;
+            border-radius: 50%;
+            position: relative;
+            background-color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: 50% 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0;
+        }
+
+        .hour {
+            width: 6px;
+            height: 60px;
+            margin-left: -3px;
+            background-color: #333;
+        }
+
+        .minute {
+            width: 4px;
+            height: 80px;
+            margin-left: -2px;
+            background-color: #666;
+        }
+
+        .second {
+            width: 2px;
+            height: 90px;
+            margin-left: -1px;
+            background-color: #f00;
+        }
+
+        .hand span {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: inherit;
+            color: #fff;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            background-color: #333;
+            border-radius: 50%;
+        }
+
+        .digital-time {
+            font-size: 5vh;
+            text-shadow: 1px 1px 2px;
+            color: #333;
+        }
+
+        /* Slide button container */
+        .slide-container {
+            position: relative;
+            width: 120px;
+            height: 40px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .slide-button {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        /* When the button is toggled */
+        .toggle-12-hour .slide-button {
+            transform: translateX(100%);
+            background-color: #f44336;
+        }
+
+        .toggle-12-hour .slide-container {
+            background-color: #4CAF50;
+        }
+
+        .slide-label {
+            position: absolute;
+            width: 50%;
+            text-align: center;
+            font-size: 14px;
+            color: white;
+            line-height: 40px;
+            font-weight: bold;
+        }
+
+        .slide-label.left {
+            left: 0;
+        }
+
+        .slide-label.right {
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="judul">
+        Jam Analog & Digital
+    </div>
+    <div class="zone-time" id="timezone">UTC</div>
+    <div class="clock">
+        <div class="hand hour" id="hour"><span></span></div>
+        <div class="hand minute" id="minute"><span></span></div>
+        <div class="hand second" id="second"><span></span></div>
+        <div class="center"></div>
+    </div>
+    <div class="digital-time" id="digital-time">00:00:00</div>
+
+    <!-- Slide Toggle Button -->
+    <div class="slide-container" id="slide-container">
+        <div class="slide-button"></div>
+        <div class="slide-label left">24-Hour</div>
+        <div class="slide-label right">12-Hour</div>
+    </div>
+
+    <script>
+        const hourHand = document.getElementById('hour');
+        const minuteHand = document.getElementById('minute');
+        const secondHand = document.getElementById('second');
+        const digitalTime = document.getElementById('digital-time');
+        const timezoneElement = document.getElementById('timezone');
+        const slideContainer = document.getElementById('slide-container');
+
+        let is12HourFormat = false;
+
+        // Function to update time every second
+        async function updateClock() {
+            try {
+                const response = await fetch('https://www.cloudflare.com/cdn-cgi/trace');
+                const data = await response.text();
+                const timestamp = data.split('\n').find(line => line.startsWith('ts=')).split('=')[1];
+                const date = new Date(parseInt(timestamp) * 1000);
+
+                let hours = date.getHours();
+                const minutes = date.getMinutes();
+                const seconds = date.getSeconds();
+                const timezoneOffset = date.getTimezoneOffset() / 60; // Offset in hours
+                const timezone = `UTC${timezoneOffset >= 0 ? '+' : ''}${timezoneOffset}`;
+
+                // If 12-hour format, adjust hours
+                if (is12HourFormat) {
+                    const ampm = hours >= 12 ? 'PM' : 'AM';
+                    hours = hours % 12;
+                    hours = hours ? hours : 12; // Hour 0 should be 12
+                    digitalTime.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '00')} ${ampm}`;
+                } else {
+                    digitalTime.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '00')}`;
+                }
+
+                // Update Timezone
+                timezoneElement.textContent = timezone;
+
+                // Calculate rotation angles for the clock hands
+                const hourDegrees = (hours % 12 + minutes / 60) * 30;
+                const minuteDegrees = (minutes + seconds / 60) * 6;
+                const secondDegrees = seconds * 6;
+
+                // Update hands and their labels
+                hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+                minuteHand.style.transform = `rotate(${minuteDegrees}deg)`;
+                secondHand.style.transform = `rotate(${secondDegrees}deg)`;
+
+                // Update the labels at the ends of the hands
+                hourHand.querySelector('span').textContent = hours.toString().padStart(2, '0');
+                minuteHand.querySelector('span').textContent = minutes.toString().padStart(2, '0');
+                secondHand.querySelector('span').textContent = seconds.toString().padStart(2, '0');
+            } catch (error) {
+                console.error('Error fetching time:', error);
+            }
+        }
+
+        // Slide to toggle between 12-hour and 24-hour format
+        slideContainer.addEventListener('click', () => {
+            is12HourFormat = !is12HourFormat;
+            if (is12HourFormat) {
+                slideContainer.classList.add('toggle-12-hour');
+            } else {
+                slideContainer.classList.remove('toggle-12-hour');
+            }
+            updateClock();
+        });
+
+        // Update clock immediately and then every second
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>
