@@ -6,156 +6,187 @@
     <link href="https://fonts.googleapis.com/css2?family=Doto:wght@100..900&display=swap" rel="stylesheet">
     <title>Digital Analog Clock</title>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: wheat;
-            font-family: Doto, sans-serif;
-            flex-direction: column;
-            font-size: 5vh;
-        }
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: brown;
+    font-family: Doto;
+    font-size: 5vh;
+}
 
-        .judul {
-            font-size: 24px;
-            margin-bottom: 10px;
-            font-weight: bold;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+.judul {
+    font-size: 43px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-        .zone-time {
-            font-size: 16px;
-            margin-top: 5px;
-            
-            color: #333;
-        }
+.zone-time {
+    font-size: 16px;
+    margin: 5px;
+    height: auto;
+    width: 60px;
+    color: white;
+    text-align: center;
+    background-color: brown;
+    border-radius: 30px;
+}
 
-        .clock {
-            width: 300px;
-            height: 300px;
-            box-shadow: inset 0px 0px 8px;
-            border-radius: 50%;
-            position: relative;
-            background-color: #fff;
-            margin-bottom: 20px;
-        }
+.clock-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 20px;
+}
 
-        .hand {
-            position: absolute;
-            bottom: 50%;
-            left: 50%;
-            transform-origin: 50% 100%;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 0;
-        }
+.clock {
+    width: 300px;
+    height: 300px;
+    box-shadow: inset 0px 0px 8px;
+    border-radius: 50%;
+    position: relative;
+    background-color: #fff;
+    box-shadow: inset 0 1px 20px brown;
+}
 
-        .hour {
-            width: 6px;
-            height: 60px;
-            margin-left: -3px;
-            background-color: #333;
-        }
+.hand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: 50% 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    text-shadow: 15px 5px 2px black;
+    z-index: 1;
+    
+}
 
-        .minute {
-            width: 4px;
-            height: 80px;
-            margin-left: -2px;
-            background-color: #666;
-        }
+.hour {
+    width: 6px;
+    height: 60px;
+    margin-left: -3px;
+    background-color: #333;
+    text-shadow: 15px 5px 2px ;
+}
 
-        .second {
-            width: 2px;
-            height: 90px;
-            margin-left: -1px;
-            background-color: #f00;
-        }
+.minute {
+    width: 4px;
+    height: 80px;
+    margin-left: -2px;
+    background-color: #666;
+    text-shadow: 15px 5px 2px ;
+}
 
-        .hand span {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: inherit;
-            color: #fff;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-size: 12px;
-        }
+.second {
+    width: 2px;
+    height: 90px;
+    margin-left: -1px;
+    background-color: #f00;
+    text-shadow: 15px 5px 2px ;
+}
 
-        .center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            margin: -10px 0 0 -10px;
-            background-color: #333;
-            border-radius: 50%;
-        }
+.hand span {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: inherit;
+    color: white;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: 12px;
+    box-shadow: 0 0 1px black;
+    border:1px red;
+}
 
-        .digital-time {
-            font-size: 5vh;
-            text-shadow: 1px 1px 2px;
-            color: #333;
-        }
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    background-color: #333;
+    border-radius: 50%;
+}
 
-        /* Slide button container */
-        .slide-container {
-            position: relative;
-            width: 120px;
-            height: 40px;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: #ddd;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+.digital-time {
+    font-size: 2vh;
+    text-shadow: 0px 2px 2px black;
+    color: #333;
+    position: absolute;
+    bottom: 13px; /* Jarak vertikal dari jam analog */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    height: auto;
+    width: auto;
+}
 
-        .slide-button {
-            position: absolute;
-            width: 50%;
-            height: 100%;
-            background-color: #4CAF50;
-            border-radius: 20px;
-            transition: transform 0.3s ease;
-        }
+/* Slide button container */
+.slide-container {
+    position: relative;
+    width: 120px;
+    height: 40px;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: whitesmoke 0 2px 20px ;
+}
 
-        /* When the button is toggled */
-        .toggle-12-hour .slide-button {
-            transform: translateX(100%);
-            background-color: #f44336;
-        }
+.slide-button {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-color: #4CAF50;
+    border-radius: 20px;
+    transition: transform 0.3s ease;
+    
+}
 
-        .toggle-12-hour .slide-container {
-            background-color: #4CAF50;
-        }
+/* When the button is toggled */
+.toggle-12-hour .slide-button {
+    transform: translateX(100%);
+    background-color: #f44336;
+}
 
-        .slide-label {
-            position: absolute;
-            width: 50%;
-            text-align: center;
-            font-size: 14px;
-            color: white;
-            line-height: 40px;
-            font-weight: bold;
-        }
+.toggle-12-hour .slide-container {
+    background-color: #4CAF50;
+}
 
-        .slide-label.left {
-            left: 0;
-        }
+.slide-label {
+    position: absolute;
+    width: 50%;
+    text-align: center;
+    font-size: 14px;
+    color: white;
+    line-height: 40px;
+    font-weight: bold;
+    text-shadow: 0 4px 4px black;
+}
 
-        .slide-label.right {
-            right: 0;
-        }
+.slide-label.left {
+    left: 0;
+}
+
+.slide-label.right {
+    right: 0;
+}
     </style>
 </head>
 <body>
@@ -164,12 +195,14 @@
     </div>
     <div class="zone-time" id="timezone">UTC</div>
     <div class="clock">
+       <div class="digital-time" id="digital-time">00:00:00</div>
         <div class="hand hour" id="hour"><span></span></div>
         <div class="hand minute" id="minute"><span></span></div>
         <div class="hand second" id="second"><span></span></div>
         <div class="center"></div>
+        
     </div>
-    <div class="digital-time" id="digital-time">00:00:00</div>
+    
 
     <!-- Slide Toggle Button -->
     <div class="slide-container" id="slide-container">
