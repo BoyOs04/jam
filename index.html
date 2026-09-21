@@ -43,7 +43,8 @@
             margin: 0;
             display: grid;
             place-items: center;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
             isolation: isolate;
             padding: 22px;
@@ -802,9 +803,55 @@
                 animation: none;
             }
         }
+    
+        /* ===== Floating utility HUD ===== */
+        .utility-hud{position:fixed;top:14px;right:14px;z-index:50;display:flex;align-items:center;gap:8px;pointer-events:none}
+        .floating-card{display:inline-flex;align-items:center;gap:8px;min-height:34px;padding:7px 10px;border:1px solid rgba(255,255,255,.1);border-radius:11px;background:rgba(8,12,21,.72);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 12px 35px rgba(0,0,0,.25);backdrop-filter:blur(16px);color:rgba(222,232,245,.72);font-size:10px;font-weight:700;letter-spacing:.07em}
+        .fps-card{font-family:Doto,monospace}.fps-value{min-width:42px;text-align:right;color:var(--success)}
+        .effects-toggle{pointer-events:auto;display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 10px;border:1px solid rgba(255,255,255,.1);border-radius:11px;background:rgba(8,12,21,.72);color:rgba(222,232,245,.78);cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 12px 35px rgba(0,0,0,.25);backdrop-filter:blur(16px)}
+        .effects-toggle:hover{border-color:rgba(114,214,255,.32);color:#fff}.effects-toggle:focus-visible{outline:2px solid rgba(114,214,255,.65);outline-offset:2px}
+        .effects-toggle__dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px rgba(114,214,255,.65)}
+        .effects-off .effects-toggle__dot{background:#6c7689;box-shadow:none}
+        /* ===== Main timezone selector ===== */
+        .timezone-picker{display:inline-flex;align-items:center;gap:7px;min-height:30px;max-width:min(92vw,340px);padding:0 9px;border:1px solid var(--line);border-radius:999px;background:rgba(12,18,31,.62);backdrop-filter:blur(14px)}
+        .timezone-picker__label{color:rgba(156,168,188,.7);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+        .timezone-select,.compare-select{min-width:0;border:0;outline:0;background:transparent;color:#dce8f5;font:700 10px Inter,system-ui,sans-serif;cursor:pointer}
+        .timezone-select{width:210px}
+        .compare-select{width:100%;min-height:36px;padding:0 34px 0 10px;border:1px solid rgba(255,255,255,.08);border-radius:10px;appearance:none;background:linear-gradient(45deg,transparent 50%,rgba(220,232,245,.65) 50%) calc(100% - 14px) 16px/5px 5px no-repeat,linear-gradient(135deg,rgba(220,232,245,.65) 50%,transparent 50%) calc(100% - 10px) 16px/5px 5px no-repeat,rgba(4,7,13,.5)}
+        .timezone-select option,.compare-select option{color:#eaf2fc;background:#0c1220}
+        /* ===== World time comparison ===== */
+        .compare-panel{width:min(100%,680px);display:none;gap:12px;padding:14px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,rgba(16,23,38,.72),rgba(8,12,21,.76));box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 20px 60px rgba(0,0,0,.22);backdrop-filter:blur(18px);text-align:left}
+        .compare-panel.is-open{display:grid;animation:panelIn .4s var(--ease)}
+        .compare-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.compare-title-wrap{display:grid;gap:3px}
+        .compare-title{color:rgba(229,237,247,.9);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.compare-subtitle{color:rgba(156,168,188,.62);font-size:9px}
+        .compare-add,.compare-open-button{pointer-events:auto;border:1px solid rgba(114,214,255,.18);border-radius:10px;padding:7px 10px;background:rgba(114,214,255,.07);color:var(--accent);cursor:pointer;font-size:10px;font-weight:800;letter-spacing:.05em}
+        .compare-add:hover,.compare-open-button:hover{background:rgba(114,214,255,.12);border-color:rgba(114,214,255,.35)}.compare-open-button{width:100%;min-height:38px;text-transform:uppercase}
+        .compare-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+        .compare-card{position:relative;overflow:hidden;min-width:0;padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:15px;background:radial-gradient(circle at 75% 15%,rgba(114,214,255,.08),transparent 28%),rgba(4,7,13,.42)}
+        .compare-card::before{content:"";position:absolute;left:-20%;right:-20%;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(114,214,255,.35),transparent)}
+        .compare-card__top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}.compare-card__name{display:grid;gap:3px}
+        .compare-card__city{color:#e8f1fb;font-size:11px;font-weight:800}.compare-card__zone{color:rgba(156,168,188,.62);font-size:8px;letter-spacing:.08em}
+        .compare-remove{width:24px;height:24px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.07);border-radius:7px;background:rgba(255,255,255,.035);color:rgba(210,220,235,.55);cursor:pointer}
+        .compare-remove:hover{color:#ff8092;border-color:rgba(255,103,125,.24)}
+        .compare-time{margin:11px 0 5px;color:#eef8ff;font-family:Doto,monospace;font-size:clamp(22px,5vw,30px);font-weight:800;line-height:1;letter-spacing:.04em;white-space:nowrap;text-shadow:0 0 14px rgba(114,214,255,.15)}
+        .compare-date{color:rgba(181,200,220,.58);font-size:9px}.compare-offset{margin-top:9px;display:inline-flex;padding:5px 7px;border:1px solid rgba(114,214,255,.1);border-radius:999px;color:rgba(114,214,255,.8);background:rgba(114,214,255,.045);font-size:8px;font-weight:800;letter-spacing:.08em}
+        .compare-open-button:focus-visible,.compare-add:focus-visible,.compare-remove:focus-visible{outline:2px solid rgba(114,214,255,.65);outline-offset:2px}
+        .effects-off::before,.effects-off::after,.effects-off .clock-aura,.effects-off .eyebrow__dot{animation:none!important}
+        .effects-off .clock-aura,.effects-off .clock-shell::after,.effects-off .second,.effects-off .center{box-shadow:none!important}.effects-off .clock-stage::before{filter:blur(8px);opacity:.45}.effects-off .clock-shell{transform:none!important}.effects-off .clock::after{opacity:.18}
+        @keyframes panelIn{from{opacity:0;transform:translateY(-7px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+        @media(max-width:620px){.utility-hud{top:8px;right:8px}.floating-card{min-height:30px;padding:6px 8px;font-size:8px}.effects-toggle{height:30px;padding:0 8px;font-size:8px}.timezone-picker{width:min(92vw,340px)}.timezone-select{flex:1;width:auto}.compare-grid{grid-template-columns:1fr}}
+
     </style>
 </head>
 <body>
+
+        <div class="utility-hud" aria-label="Utility controls">
+            <div class="floating-card fps-card" title="Frame rate"><span>FPS</span><strong class="fps-value" id="fps-value">--</strong></div>
+            <button class="effects-toggle" id="effects-toggle" type="button" aria-pressed="true" title="Enable atau disable efek visual">
+                <span class="effects-toggle__dot" aria-hidden="true"></span><span id="effects-label">FX ON</span>
+            </button>
+        </div>
+
     <main class="app">
         <div class="hud" aria-hidden="true">
             <span class="hud__line hud__line--top"></span>
@@ -826,6 +873,12 @@
 
             <div class="clock-meta">
                 <div class="zone-time" id="timezone">UTC</div>
+
+                <div class="timezone-picker" title="Pilih zona waktu utama">
+                    <span class="timezone-picker__label">Zone</span>
+                    <select class="timezone-select" id="main-timezone" aria-label="Zona waktu utama"></select>
+                </div>
+
                 <div class="date-time" id="date-time">-- · -- --- ----</div>
             </div>
 
@@ -879,6 +932,19 @@
                     <div class="slide-label right">12-Hour</div>
                 </div>
             </div>
+
+
+            <section class="compare-panel" id="compare-panel" aria-label="Perbandingan waktu dunia">
+                <div class="compare-head">
+                    <div class="compare-title-wrap">
+                        <div class="compare-title">World Time Compare</div>
+                        <div class="compare-subtitle">Bandingkan dua atau lebih lokasi secara real-time</div>
+                    </div>
+                    <button class="compare-add" id="compare-add" type="button">+ Add location</button>
+                </div>
+                <div class="compare-grid" id="compare-grid"></div>
+            </section>
+
 
             <div class="footer">
                 <span id="sync-status">SYNCED</span>
@@ -996,61 +1062,118 @@
             }
         }
 
-        function getCurrentDate() {
-            return new Date(
-                state.baseTimeMs + (performance.now() - state.syncPerfMs)
-            );
+
+        const mainTimezone = document.getElementById("main-timezone");
+        const compareOpenButton = document.getElementById("compare-open-button");
+        const comparePanel = document.getElementById("compare-panel");
+        const compareAddButton = document.getElementById("compare-add");
+        const compareGrid = document.getElementById("compare-grid");
+        const fpsValue = document.getElementById("fps-value");
+        const effectsToggle = document.getElementById("effects-toggle");
+        const effectsLabel = document.getElementById("effects-label");
+
+        const TIME_ZONES = [
+            { zone:"local", label:"Auto · Browser", city:"Local" },
+            { zone:"UTC", label:"GMT · UTC+0", city:"Greenwich / UTC" },
+            { zone:"Asia/Jakarta", label:"WIB · UTC+7", city:"Jakarta" },
+            { zone:"Asia/Makassar", label:"WITA · UTC+8", city:"Makassar" },
+            { zone:"Asia/Jayapura", label:"WIT · UTC+9", city:"Jayapura" },
+            { zone:"Asia/Singapore", label:"SGT · UTC+8", city:"Singapore" },
+            { zone:"Asia/Tokyo", label:"JST · UTC+9", city:"Tokyo" },
+            { zone:"Asia/Seoul", label:"KST · UTC+9", city:"Seoul" },
+            { zone:"Asia/Shanghai", label:"China Standard · UTC+8", city:"Shanghai" },
+            { zone:"Asia/Kolkata", label:"IST · UTC+5:30", city:"Kolkata" },
+            { zone:"Asia/Dubai", label:"GST · UTC+4", city:"Dubai" },
+            { zone:"Asia/Riyadh", label:"AST · UTC+3", city:"Riyadh" },
+            { zone:"Europe/London", label:"GMT / BST", city:"London" },
+            { zone:"Europe/Berlin", label:"CET / CEST", city:"Berlin" },
+            { zone:"Europe/Moscow", label:"MSK · UTC+3", city:"Moscow" },
+            { zone:"America/New_York", label:"ET · EST / EDT", city:"New York" },
+            { zone:"America/Chicago", label:"CT · CST / CDT", city:"Chicago" },
+            { zone:"America/Denver", label:"MT · MST / MDT", city:"Denver" },
+            { zone:"America/Los_Angeles", label:"PT · PST / PDT", city:"Los Angeles" },
+            { zone:"America/Sao_Paulo", label:"BRT · UTC-3", city:"São Paulo" },
+            { zone:"Pacific/Honolulu", label:"HST · UTC-10", city:"Honolulu" },
+            { zone:"Australia/Sydney", label:"AEST / AEDT", city:"Sydney" },
+            { zone:"Pacific/Auckland", label:"NZST / NZDT", city:"Auckland" }
+        ];
+
+        const TIMEZONE_BY_ZONE = new Map(TIME_ZONES.map((item) => [item.zone, item]));
+        const compareState = { zones:["Asia/Jakarta", "Asia/Makassar"] };
+
+        function getTimeZone() {
+            return mainTimezone.value === "local"
+                ? Intl.DateTimeFormat().resolvedOptions().timeZone
+                : mainTimezone.value;
         }
 
-        function getUtcOffsetLabel(date) {
-            const offsetMinutes = -date.getTimezoneOffset();
-            const sign = offsetMinutes >= 0 ? "+" : "-";
-            const absoluteMinutes = Math.abs(offsetMinutes);
-            const hours = Math.floor(absoluteMinutes / 60);
-            const minutes = absoluteMinutes % 60;
-
-            return minutes === 0
-                ? `UTC${sign}${hours}`
-                : `UTC${sign}${hours}:${String(minutes).padStart(2, "0")}`;
-        }
-
-        function formatDisplayTime(date) {
-            const hour24 = date.getHours();
-            const minute = date.getMinutes();
-            const second = date.getSeconds();
-
-            if (state.is12HourFormat) {
-                const period = hour24 >= 12 ? "PM" : "AM";
-                const hour12 = hour24 % 12 || 12;
-
-                return `${String(hour12).padStart(2, "0")}:${String(minute).padStart(2, "0")}:${String(second).padStart(2, "0")} ${period}`;
+        function getZonedParts(date, timeZone) {
+            const parts = new Intl.DateTimeFormat("en-US", {
+                timeZone:timeZone, hourCycle:"h23", year:"numeric", month:"2-digit",
+                day:"2-digit", hour:"2-digit", minute:"2-digit", second:"2-digit"
+            }).formatToParts(date);
+            const values = {};
+            for (const part of parts) {
+                if (part.type !== "literal") values[part.type] = Number(part.value);
             }
-
-            return `${String(hour24).padStart(2, "0")}:${String(minute).padStart(2, "0")}:${String(second).padStart(2, "0")}`;
+            return values;
         }
 
-        function updateStaticTimeLabels(date) {
-            const hour24 = date.getHours();
-            const minute = date.getMinutes();
-            const second = date.getSeconds();
-            const displayHour = state.is12HourFormat
-                ? (hour24 % 12 || 12)
-                : hour24;
+        function getOffsetLabel(date, timeZone) {
+            return new Intl.DateTimeFormat("en-US", {
+                timeZone:timeZone, timeZoneName:"shortOffset"
+            }).formatToParts(date).find((part) => part.type === "timeZoneName")?.value || "GMT";
+        }
 
-            digitalTime.textContent = formatDisplayTime(date);
-            digitalZone.textContent = state.is12HourFormat ? "LOCAL · 12H" : "LOCAL · 24H";
+        function getAbbreviation(date, timeZone) {
+            const custom = {
+                "Asia/Jakarta":"WIB", "Asia/Makassar":"WITA", "Asia/Jayapura":"WIT",
+                "Asia/Tokyo":"JST", "Asia/Seoul":"KST", "Asia/Singapore":"SGT",
+                "Asia/Shanghai":"CST", "Asia/Kolkata":"IST", "Asia/Dubai":"GST",
+                "Asia/Riyadh":"AST", "Europe/Moscow":"MSK", "America/Sao_Paulo":"BRT",
+                "Pacific/Honolulu":"HST", "UTC":"GMT"
+            };
+            if (custom[timeZone]) return custom[timeZone];
 
-            hourHand.querySelector("span").textContent = String(displayHour).padStart(2, "0");
-            minuteHand.querySelector("span").textContent = String(minute).padStart(2, "0");
-            secondHand.querySelector("span").textContent = String(second).padStart(2, "0");
+            return new Intl.DateTimeFormat("en-US", {
+                timeZone:timeZone, timeZoneName:"short"
+            }).formatToParts(date).find((part) => part.type === "timeZoneName")?.value || getOffsetLabel(date, timeZone);
+        }
 
-            timezoneElement.textContent = getUtcOffsetLabel(date);
+        function populateTimezoneSelect(select) {
+            const fragment = document.createDocumentFragment();
+            for (const item of TIME_ZONES) {
+                const option = document.createElement("option");
+                option.value = item.zone;
+                option.textContent = item.label;
+                fragment.appendChild(option);
+            }
+            select.replaceChildren(fragment);
+        }
 
-            dateTimeElement.textContent = new Intl.DateTimeFormat(undefined, {
-                weekday: "short",
-                day: "2-digit",
-                month: "short",
-                year: "numeric"
+        function updateMainTimeZone(date) {
+            const timeZone = getTimeZone();
+            const parts = getZonedParts(date, timeZone);
+            const hour24 = parts.hour;
+            const minute = parts.minute;
+            const second = parts.second;
+            const displayHour = state.is12HourFormat ? (hour24 % 12 || 12) : hour24;
+            const h = String(displayHour).padStart(2, "0");
+            const m = String(minute).padStart(2, "0");
+            const s = String(second).padStart(2, "0");
+
+            digitalTime.textContent = state.is12HourFormat
+                ? h + ":" + m + ":" + s + " " + (hour24 >= 12 ? "PM" : "AM")
+                : h + ":" + m + ":" + s;
+
+            digitalZone.textContent = getAbbreviation(date, timeZone) + " · " + (state.is12HourFormat ? "12H" : "24H");
+            timezoneElement.textContent = getAbbreviation(date, timeZone) + " · " + getOffsetLabel(date, timeZone);
+            hourHand.querySelector("span").textContent = h;
+            minuteHand.querySelector("span").textContent = m;
+            secondHand.querySelector("span").textContent = s;
+
+            dateTimeElement.textContent = new Intl.DateTimeFormat("id-ID", {
+                timeZone:timeZone, weekday:"short", day:"2-digit", month:"short", year:"numeric"
             }).format(date);
 
             formatHint.textContent = state.is12HourFormat ? "12-hour" : "24-hour";
@@ -1058,75 +1181,212 @@
             slideContainer.setAttribute("aria-checked", String(state.is12HourFormat));
         }
 
-        function updateHands(date) {
-            const milliseconds = date.getMilliseconds();
-            const seconds = date.getSeconds() + milliseconds / 1000;
-            const minutes = date.getMinutes() + seconds / 60;
-            const hours = date.getHours() + minutes / 60;
-
-            // Always calculate the analog hand from 24-hour time.
-            // The 12/24 toggle changes the display only.
+        function updateMainHands(date) {
+            const timeZone = getTimeZone();
+            const parts = getZonedParts(date, timeZone);
+            const seconds = parts.second + date.getMilliseconds() / 1000;
+            const minutes = parts.minute + seconds / 60;
+            const hours = parts.hour + minutes / 60;
             const hourDegrees = (hours % 12) * 30;
             const minuteDegrees = minutes * 6;
             const secondDegrees = seconds * 6;
 
-            hourHand.style.transform = `rotate(${hourDegrees}deg) translateZ(20px)`;
-            minuteHand.style.transform = `rotate(${minuteDegrees}deg) translateZ(21px)`;
-            secondHand.style.transform = `rotate(${secondDegrees}deg) translateZ(22px)`;
+            hourHand.style.transform = "rotate(" + hourDegrees + "deg) translateZ(20px)";
+            minuteHand.style.transform = "rotate(" + minuteDegrees + "deg) translateZ(21px)";
+            secondHand.style.transform = "rotate(" + secondDegrees + "deg) translateZ(22px)";
+        }
+
+        function renderCompareCard(zone, index, date) {
+            const info = TIMEZONE_BY_ZONE.get(zone) || {
+                label:zone,
+                city:zone.split("/").pop()?.replaceAll("_", " ") || zone
+            };
+
+            const time = new Intl.DateTimeFormat("id-ID", {
+                timeZone:zone, hour:"2-digit", minute:"2-digit", second:"2-digit", hourCycle:"h23"
+            }).format(date);
+
+            const dateLabel = new Intl.DateTimeFormat("id-ID", {
+                timeZone:zone, weekday:"short", day:"2-digit", month:"short", year:"numeric"
+            }).format(date);
+
+            const options = TIME_ZONES
+                .filter((item) => item.zone !== "local")
+                .map((item) =>
+                    '<option value="' + item.zone + '"' +
+                    (item.zone === zone ? " selected" : "") + ">" +
+                    item.city + " — " + item.label + "</option>"
+                )
+                .join("");
+
+            return (
+                '<article class="compare-card">' +
+                    '<div class="compare-card__top">' +
+                        '<div class="compare-card__name">' +
+                            '<strong class="compare-card__city">' + info.city + "</strong>" +
+                            '<span class="compare-card__zone">' + info.label + "</span>" +
+                        "</div>" +
+                        '<button class="compare-remove" type="button" data-remove-index="' + index + '" aria-label="Hapus ' + info.city + '" title="Hapus lokasi">×</button>' +
+                    "</div>" +
+                    '<select class="compare-select" data-zone-index="' + index + '" aria-label="Pilih lokasi jam ' + (index + 1) + '">' +
+                        options +
+                    "</select>" +
+                    '<div class="compare-time">' + time + "</div>" +
+                    '<div class="compare-date">' + dateLabel + "</div>" +
+                    '<span class="compare-offset">' + getAbbreviation(date, zone) + " · " + getOffsetLabel(date, zone) + "</span>" +
+                "</article>"
+            );
+        }
+
+        function renderComparison(date) {
+            const currentDate = date || getCurrentDate();
+
+            compareGrid.innerHTML = compareState.zones
+                .map((zone, index) => renderCompareCard(zone, index, currentDate))
+                .join("");
+
+            compareGrid.querySelectorAll("[data-zone-index]").forEach((select) => {
+                select.addEventListener("change", (event) => {
+                    const index = Number(event.currentTarget.dataset.zoneIndex);
+                    compareState.zones[index] = event.currentTarget.value;
+                    renderComparison(getCurrentDate());
+                });
+            });
+
+            compareGrid.querySelectorAll("[data-remove-index]").forEach((button) => {
+                button.addEventListener("click", (event) => {
+                    const index = Number(event.currentTarget.dataset.removeIndex);
+                    if (compareState.zones.length <= 2) return;
+                    compareState.zones.splice(index, 1);
+                    renderComparison(getCurrentDate());
+                });
+            });
+        }
+
+        function openComparison() {
+            comparePanel.classList.toggle("is-open");
+            const isOpen = comparePanel.classList.contains("is-open");
+
+            compareOpenButton.setAttribute("aria-expanded", String(isOpen));
+            compareOpenButton.textContent = isOpen ? "Hide Comparison" : "Compare 2 Clocks";
+
+            if (isOpen) renderComparison(getCurrentDate());
+        }
+
+        function addComparisonLocation() {
+            if (compareState.zones.length >= 6) return;
+
+            const next = TIME_ZONES
+                .filter((item) => item.zone !== "local")
+                .map((item) => item.zone)
+                .find((zone) => !compareState.zones.includes(zone));
+
+            if (next) {
+                compareState.zones.push(next);
+                renderComparison(getCurrentDate());
+            }
+        }
+
+        function initializeTimeZones() {
+            populateTimezoneSelect(mainTimezone);
+            mainTimezone.value = "local";
+
+            mainTimezone.addEventListener("change", () => {
+                state.lastSecond = -1;
+                updateMainTimeZone(getCurrentDate());
+            });
+        }
+
+        function updateEffectsState(enabled) {
+            document.body.classList.toggle("effects-off", !enabled);
+            effectsToggle.setAttribute("aria-pressed", String(enabled));
+            effectsLabel.textContent = enabled ? "FX ON" : "FX OFF";
+
+            try {
+                localStorage.setItem("clock-effects", enabled ? "on" : "off");
+            } catch {
+                // Ignore storage restrictions.
+            }
+        }
+
+        function initializeEffects() {
+            let enabled = true;
+
+            try {
+                enabled = localStorage.getItem("clock-effects") !== "off";
+            } catch {
+                // Keep effects enabled when storage is unavailable.
+            }
+
+            updateEffectsState(enabled);
+
+            effectsToggle.addEventListener("click", () => {
+                const enabledNow = effectsToggle.getAttribute("aria-pressed") === "true";
+                updateEffectsState(!enabledNow);
+            });
+        }
+
+        let fpsFrames = 0;
+        let fpsLastUpdate = performance.now();
+
+        function updateFps(now) {
+            fpsFrames += 1;
+
+            if (now - fpsLastUpdate >= 500) {
+                const fps = Math.min(999, Math.round((fpsFrames * 1000) / (now - fpsLastUpdate)));
+                fpsValue.textContent = String(fps);
+                fpsValue.style.color = fps < 30 ? "var(--danger)" : fps < 50 ? "#ffd166" : "var(--success)";
+                fpsFrames = 0;
+                fpsLastUpdate = now;
+            }
         }
 
         function render() {
             const date = getCurrentDate();
-            const second = date.getSeconds();
+            const second = getZonedParts(date, getTimeZone()).second;
 
-            updateHands(date);
+            updateMainHands(date);
+            updateFps(performance.now());
 
             if (second !== state.lastSecond) {
                 state.lastSecond = second;
-                updateStaticTimeLabels(date);
+                updateMainTimeZone(date);
+
+                if (comparePanel.classList.contains("is-open")) {
+                    renderComparison(date);
+                }
             }
 
             window.requestAnimationFrame(render);
         }
 
-        function toggleFormat() {
-            state.is12HourFormat = !state.is12HourFormat;
-            updateStaticTimeLabels(getCurrentDate());
-        }
-
-        slideContainer.addEventListener("click", toggleFormat);
-
-        slideContainer.addEventListener("keydown", (event) => {
-            if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                toggleFormat();
-            }
-        });
-
         buildDial();
-        updateStaticTimeLabels(new Date());
+        initializeTimeZones();
+        initializeEffects();
+
+        compareOpenButton.addEventListener("click", openComparison);
+        compareAddButton.addEventListener("click", addComparisonLocation);
+
+        updateMainTimeZone(getCurrentDate());
+
         synchronizeTime().finally(() => {
             state.lastSecond = -1;
         });
+
         render();
 
-        // Re-sync when the page becomes visible again, but never more often
-        // than once per minute.
         let lastVisibilitySync = 0;
 
         document.addEventListener("visibilitychange", () => {
-            if (document.visibilityState !== "visible") {
-                return;
-            }
+            if (document.visibilityState !== "visible") return;
 
             const now = performance.now();
-            if (now - lastVisibilitySync < 60000) {
-                return;
-            }
+            if (now - lastVisibilitySync < 60000) return;
 
             lastVisibilitySync = now;
             synchronizeTime();
         });
+
     </script>
 </body>
 </html>
