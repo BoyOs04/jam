@@ -1027,6 +1027,17 @@
          * This avoids a network request every second and still preserves the
          * original Cloudflare-based source when available.
          */
+
+        /**
+         * Return the current clock time using the last synchronized epoch.
+         * performance.now() is monotonic, so the clock keeps advancing after sync.
+         */
+        function getCurrentDate() {
+            return new Date(
+                state.baseTimeMs + (performance.now() - state.syncPerfMs)
+            );
+        }
+
         async function synchronizeTime() {
             try {
                 const response = await fetch("https://www.cloudflare.com/cdn-cgi/trace", {
